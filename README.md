@@ -6,12 +6,13 @@
 
 A [Coinbase CDP](https://docs.cdp.coinbase.com/) embedded smart-account wallet
 exposed as a **bare React Native** [wagmi](https://wagmi.sh) connector, plus the
-Coinbase Smart Wallet ERC-1271 / ERC-6492 signature wrapping the account needs.
+ERC-1271 / ERC-6492 signature wrapping Coinbase Smart Wallets need.
 
-Coinbase's official connectors don't work in bare RN: `@coinbase/cdp-wagmi` is
-web-only, and the generic `@wagmi/connectors` are hostile to bare RN on the New
+Nothing official covers this: Coinbase's
+[`@coinbase/cdp-wagmi`](https://www.npmjs.com/package/@coinbase/cdp-wagmi) is
+web-only, and the generic `@wagmi/connectors` don't survive bare RN on the New
 Architecture (dynamic `import()`, `window.*` reads, EIP-6963 discovery, Metro
-ESM interop). This package ships a hand-authored `createConnector` that does.
+ESM interop). This package ships a purpose-built `createConnector` that does.
 
 ## vs @coinbase/cdp-wagmi
 
@@ -35,29 +36,34 @@ one.
 ## Install
 
 ```sh
-npm install cdp-wagmi-rn
+npm install cdp-wagmi-rn @coinbase/cdp-core @coinbase/cdp-hooks wagmi viem ethers
 ```
 
-Peer dependencies (provide these in your app so they dedupe to a single copy):
-`@coinbase/cdp-core`, `@wagmi/core`, `ethers@^6`. The connector reads CDP session
-state via a bridge you wire from `@coinbase/cdp-hooks`.
+The peer dependencies dedupe to your app's copies; the polyfill/Metro companion
+packages are covered in [docs/SETUP.md](./docs/SETUP.md).
+
+Verified against `@wagmi/core` v3; the peer range also accepts v2, which
+type-checks but hasn't been run.
+
+Prerequisites: a CDP Portal project ID (see [docs/SETUP.md §4](./docs/SETUP.md)).
 
 ## Quickstart
 
 ```ts
 import { createConfig, http } from 'wagmi';
+import { baseSepolia } from 'viem/chains';
 import { cdpWagmiConnector, type CdpWalletConfig } from 'cdp-wagmi-rn';
 
 const cfg: CdpWalletConfig = {
-  chainId: 84532,
+  chainId: baseSepolia.id,
   rpcUrl: 'https://sepolia.base.org',
   cdpNetwork: 'base-sepolia',
 };
 
 export const wagmiConfig = createConfig({
-  chains: [/* your viem chain */],
+  chains: [baseSepolia],
   connectors: [cdpWagmiConnector(cfg)],
-  transports: { 84532: http(cfg.rpcUrl) },
+  transports: { [baseSepolia.id]: http(cfg.rpcUrl) },
 });
 ```
 
@@ -184,7 +190,10 @@ This package assumes a New-Arch / Bridgeless RN app with Web Crypto and
 configured for CDP's transitive deps (`unstable_enablePackageExports`,
 `stream`/`crypto`/`ws` shims). The connector itself is pure TypeScript — the
 native requirements come from its polyfill companions and from CDP's dependency
-graph. See **[docs/SETUP.md](./docs/SETUP.md)** for the full, verified setup.
+graph. The code is extracted from a production Android app (RN 0.83, Hermes,
+Bridgeless/New Architecture); the 0.0.x line is the pre-verification extraction —
+v0.1.0 marks the device-verified cut. See **[docs/SETUP.md](./docs/SETUP.md)**
+for the full setup.
 
 ## License
 

@@ -77,7 +77,7 @@ export function cdpWagmiConnector(cfg: CdpWalletConfig): CreateConnectorFn {
     },
 
     // Cast: wagmi v3 types `connect` with a conditional EIP-5792 `withCapabilities`
-    // return that a hand-authored connector can't satisfy structurally. The
+    // return that a custom connector can't satisfy structurally. The
     // runtime shape ({ accounts, chainId }) is correct for the default case.
     connect: (async (params?: { isReconnecting?: boolean }) => {
       // Drive the email-OTP modal only for a fresh connect when CDP is NOT

@@ -2,9 +2,9 @@
  * cdp-wagmi-rn — a Coinbase CDP embedded smart-account wallet as a
  * bare-React-Native wagmi connector.
  *
- * The official `@wagmi/connectors` are hostile to bare RN (dynamic import,
+ * The official `@wagmi/connectors` don't work in bare RN (dynamic import,
  * `window.*` reads, EIP-6963 discovery, Metro ESM interop). This package ships
- * a hand-authored `createConnector` over the CDP capability core that works on
+ * its own `createConnector` over the CDP capability core that works on
  * RN New Architecture, plus the Coinbase Smart Wallet ERC-1271 / ERC-6492
  * signature wrapping the account needs.
  *
