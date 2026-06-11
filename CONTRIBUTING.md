@@ -10,7 +10,7 @@ npm run build      # outputs to lib/
 npm run size       # bundlesize check
 ```
 
-The jest pipeline uses babel-jest with a node test environment. Peer dependencies (`wagmi`, `viem`, `@coinbase/cdp-core`, etc.) are mocked — no React Native runtime or emulator is required to run tests.
+The jest pipeline uses babel-jest with a node test environment. `@coinbase/cdp-core` and `@wagmi/core` are mocked in tests while `ethers` runs for real — no React Native runtime or emulator is required.
 
 ## PR expectations
 
