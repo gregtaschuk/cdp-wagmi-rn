@@ -1,0 +1,62 @@
+{
+  "name": "cdp-wagmi-rn",
+  "version": "0.0.1",
+  "description": "Coinbase CDP embedded smart-account wallet as a bare-React-Native wagmi connector (New Architecture), with Coinbase Smart Wallet ERC-1271 / ERC-6492 signing.",
+  "license": "MIT",
+  "author": "Greg Taschuk (https://github.com/gregtaschuk)",
+  "repository": { "type": "git", "url": "git+https://github.com/gregtaschuk/cdp-wagmi-rn.git" },
+  "homepage": "https://github.com/gregtaschuk/cdp-wagmi-rn#readme",
+  "bugs": "https://github.com/gregtaschuk/cdp-wagmi-rn/issues",
+  "main": "./lib/commonjs/index.js",
+  "module": "./lib/module/index.js",
+  "types": "./lib/typescript/src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": { "types": "./lib/typescript/src/index.d.ts", "default": "./lib/module/index.js" },
+      "require": { "types": "./lib/typescript/src/index.d.ts", "default": "./lib/commonjs/index.js" }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["src", "lib", "!**/*.test.ts", "README.md", "LICENSE"],
+  "sideEffects": false,
+  "keywords": ["wagmi", "react-native", "coinbase", "cdp", "smart-account", "erc-4337", "erc-1271", "erc-6492", "eip-1193", "new-architecture"],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "build": "bob build",
+    "size": "size-limit",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build"
+  },
+  "peerDependencies": {
+    "@coinbase/cdp-core": ">=0.0.37",
+    "@wagmi/core": "^2 || ^3",
+    "ethers": "^6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.24.0",
+    "@babel/preset-typescript": "^7.24.0",
+    "@coinbase/cdp-core": "^0.0.37",
+    "@size-limit/preset-small-lib": "^11.1.0",
+    "@types/jest": "^29.5.0",
+    "@wagmi/core": "^3.0.0",
+    "babel-jest": "^29.7.0",
+    "ethers": "^6.13.0",
+    "jest": "^29.7.0",
+    "react-native-builder-bob": "^0.40.0",
+    "size-limit": "^11.1.0",
+    "typescript": "^5.7.0",
+    "viem": "^2.52.2"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "exclude": "**/*.test.ts",
+    "targets": [
+      ["commonjs", { "esm": true }],
+      ["module", { "esm": true }],
+      ["typescript", { "project": "tsconfig.build.json" }]
+    ]
+  },
+  "publishConfig": { "access": "public", "provenance": true }
+}
