@@ -14,6 +14,7 @@
  */
 
 import { createConnector } from '@wagmi/core';
+import type { CreateConnectorFn } from '@wagmi/core';
 import { ethers } from 'ethers';
 import { createCdpEip1193Provider } from './cdpEip1193';
 import { getCdpState, subscribeCdpState, waitForCdpAddress } from './cdpBridge';
@@ -31,7 +32,7 @@ export function registerCdpAuthRequester(fn: (() => Promise<void>) | null): void
   authRequester = fn;
 }
 
-export function cdpWagmiConnector(cfg: CdpWalletConfig) {
+export function cdpWagmiConnector(cfg: CdpWalletConfig): CreateConnectorFn {
   // Lazily-built singletons so getProvider() is stable across calls.
   let provider: Eip1193Provider | null = null;
   let unsubscribe: (() => void) | null = null;
